@@ -31,7 +31,13 @@ export type StudyMode =
     | 'memorise'
     | 'fill-in-blank';
 
-export type CertificationTier = 'foundational' | 'associate' | 'professional';
+export type CertificationProvider = 'google-cloud' | 'anthropic';
+
+export type CertificationTier =
+    | 'foundational'
+    | 'associate'
+    | 'professional'
+    | 'foundations';
 
 /** Official standard-exam length (not the shorter renewal exam). */
 export interface ExamSpec {
@@ -44,6 +50,7 @@ export interface QuestionBank {
     key: string;
     name: string;
     shortName: string;
+    provider: CertificationProvider;
     tier: CertificationTier;
     dataset: string | null;
     available: boolean;
@@ -76,35 +83,86 @@ const EXAM_PAA: ExamSpec = {
     questionCountMax: 80,
 };
 
-export const CERTIFICATION_TIERS: Record<
-    CertificationTier,
-    { name: string; color: string; description: string }
-> = {
-    foundational: {
-        name: 'Foundational',
-        color: '#34A853',
-        description:
-            'Validates broad knowledge of cloud concepts and Google Cloud products, services, and tools.',
-    },
-    associate: {
-        name: 'Associate',
-        color: '#FBBC05',
-        description:
-            'Validates fundamental skills to deploy and maintain cloud projects.',
-    },
-    professional: {
-        name: 'Professional',
-        color: '#4285F4',
-        description:
-            'Validates advanced skills in design, implementation, and management.',
-    },
+/** CCAR-F: 60 items across 4 of 6 scenarios in 120 minutes. */
+const EXAM_CCAR_F: ExamSpec = {
+    durationMinutes: 120,
+    questionCountMin: 60,
+    questionCountMax: 60,
 };
+
+export interface TierInfo {
+    key: CertificationTier;
+    name: string;
+    color: string;
+    description: string;
+}
+
+export interface ProviderInfo {
+    key: CertificationProvider;
+    name: string;
+    /** Tiers in the order they are shown on the homepage. */
+    tiers: TierInfo[];
+}
+
+const ANTHROPIC_COLOR = '#D97757';
+const ANTHROPIC_PROFESSIONAL_COLOR = '#A9583E';
+
+export const CERTIFICATION_PROVIDERS: ProviderInfo[] = [
+    {
+        key: 'google-cloud',
+        name: 'Google Cloud',
+        tiers: [
+            {
+                key: 'foundational',
+                name: 'Foundational',
+                color: '#34A853',
+                description:
+                    'Validates broad knowledge of cloud concepts and Google Cloud products, services, and tools.',
+            },
+            {
+                key: 'associate',
+                name: 'Associate',
+                color: '#FBBC05',
+                description:
+                    'Validates fundamental skills to deploy and maintain cloud projects.',
+            },
+            {
+                key: 'professional',
+                name: 'Professional',
+                color: '#4285F4',
+                description:
+                    'Validates advanced skills in design, implementation, and management.',
+            },
+        ],
+    },
+    {
+        key: 'anthropic',
+        name: 'Anthropic',
+        tiers: [
+            {
+                key: 'foundations',
+                name: 'Foundations',
+                color: ANTHROPIC_COLOR,
+                description:
+                    'Validates practical judgment building production solutions with Claude, Claude Code, the Agent SDK, and MCP.',
+            },
+            {
+                key: 'professional',
+                name: 'Professional',
+                color: ANTHROPIC_PROFESSIONAL_COLOR,
+                description:
+                    'Validates advanced expertise designing and operating Claude systems at scale.',
+            },
+        ],
+    },
+];
 
 export const QUESTION_BANKS: QuestionBank[] = [
     {
         key: 'cdl',
         name: 'Cloud Digital Leader',
         shortName: 'CDL',
+        provider: 'google-cloud',
         tier: 'foundational',
         dataset: '/cdl.json',
         available: true,
@@ -115,6 +173,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'genai',
         name: 'Generative AI Leader',
         shortName: 'GenAI',
+        provider: 'google-cloud',
         tier: 'foundational',
         dataset: '/genai.json',
         available: true,
@@ -125,6 +184,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'ace',
         name: 'Cloud Engineer',
         shortName: 'ACE',
+        provider: 'google-cloud',
         tier: 'associate',
         dataset: null,
         available: false,
@@ -135,6 +195,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'adp',
         name: 'Data Practitioner',
         shortName: 'ADP',
+        provider: 'google-cloud',
         tier: 'associate',
         dataset: null,
         available: false,
@@ -145,6 +206,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'agwa',
         name: 'Google Workspace Administrator',
         shortName: 'AGWA',
+        provider: 'google-cloud',
         tier: 'associate',
         dataset: null,
         available: false,
@@ -155,6 +217,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pca',
         name: 'Cloud Architect',
         shortName: 'PCA',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: '/pca.json',
         available: true,
@@ -165,6 +228,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pcde',
         name: 'Cloud Database Engineer',
         shortName: 'PCDE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: null,
         available: false,
@@ -175,6 +239,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pcd',
         name: 'Cloud Developer',
         shortName: 'PCD',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: '/pcd.json',
         available: true,
@@ -185,6 +250,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pde',
         name: 'Data Engineer',
         shortName: 'PDE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: '/pde.json',
         available: true,
@@ -195,6 +261,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pcdo',
         name: 'Cloud DevOps Engineer',
         shortName: 'PCDO',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: null,
         available: false,
@@ -205,6 +272,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pcse',
         name: 'Cloud Security Engineer',
         shortName: 'PCSE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: null,
         available: false,
@@ -215,6 +283,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pcne',
         name: 'Cloud Network Engineer',
         shortName: 'PCNE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: null,
         available: false,
@@ -225,6 +294,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'pmle',
         name: 'Machine Learning Engineer',
         shortName: 'PMLE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: '/pmle.json',
         available: true,
@@ -235,6 +305,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'paa',
         name: 'Agentic Architect',
         shortName: 'PAA',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: '/paa.json',
         available: true,
@@ -246,11 +317,56 @@ export const QUESTION_BANKS: QuestionBank[] = [
         key: 'psoe',
         name: 'Security Operations Engineer',
         shortName: 'PSOE',
+        provider: 'google-cloud',
         tier: 'professional',
         dataset: null,
         available: false,
         color: '#4285F4',
         exam: EXAM_STANDARD,
+    },
+    {
+        key: 'ccar-f',
+        name: 'Claude Certified Architect',
+        shortName: 'CCAR-F',
+        provider: 'anthropic',
+        tier: 'foundations',
+        dataset: '/ccar-f.json',
+        available: true,
+        color: ANTHROPIC_COLOR,
+        exam: EXAM_CCAR_F,
+    },
+    {
+        key: 'cca-f',
+        name: 'Claude Certified Associate',
+        shortName: 'CCA-F',
+        provider: 'anthropic',
+        tier: 'foundations',
+        dataset: null,
+        available: false,
+        color: ANTHROPIC_COLOR,
+        exam: EXAM_CCAR_F,
+    },
+    {
+        key: 'ccd-f',
+        name: 'Claude Certified Developer',
+        shortName: 'CCD-F',
+        provider: 'anthropic',
+        tier: 'foundations',
+        dataset: null,
+        available: false,
+        color: ANTHROPIC_COLOR,
+        exam: EXAM_CCAR_F,
+    },
+    {
+        key: 'ccar-p',
+        name: 'Claude Certified Architect',
+        shortName: 'CCAR-P',
+        provider: 'anthropic',
+        tier: 'professional',
+        dataset: null,
+        available: false,
+        color: ANTHROPIC_PROFESSIONAL_COLOR,
+        exam: EXAM_CCAR_F,
     },
 ];
 
@@ -262,17 +378,16 @@ export const toSlug = (value: string) =>
         .replace(/^-+|-+$/g, '');
 
 export const getBankFromParams = (
+    provider: string | undefined,
     tier: string | undefined,
     slug: string | undefined
 ): QuestionBank | null => {
-    if (!tier || !slug) return null;
-    if (!['foundational', 'associate', 'professional'].includes(tier)) {
-        return null;
-    }
+    if (!provider || !tier || !slug) return null;
     return (
         QUESTION_BANKS.find(
             bank =>
-                bank.tier === (tier as CertificationTier) &&
+                bank.provider === provider &&
+                bank.tier === tier &&
                 toSlug(bank.name) === slug &&
                 bank.available
         ) || null
@@ -281,20 +396,29 @@ export const getBankFromParams = (
 
 export const getStaticBankPaths = () =>
     QUESTION_BANKS.filter(b => b.available).map(bank => ({
-        params: { tier: bank.tier, slug: toSlug(bank.name) },
+        params: {
+            provider: bank.provider,
+            tier: bank.tier,
+            slug: toSlug(bank.name),
+        },
         props: { bank },
     }));
 
 export const getBankBasePath = (bank: QuestionBank) =>
-    `${import.meta.env.BASE_URL}${bank.tier}/${toSlug(bank.name)}/`;
+    `${import.meta.env.BASE_URL}${bank.provider}/${bank.tier}/${toSlug(bank.name)}/`;
 
 export const getBankModePath = (bank: QuestionBank, mode: StudyMode) => {
     const modeSegment = mode === 'fill-in-blank' ? 'fill-in-blank' : mode;
-    return `${import.meta.env.BASE_URL}${bank.tier}/${toSlug(bank.name)}/${modeSegment}`;
+    return `${getBankBasePath(bank)}${modeSegment}`;
 };
 
-export const getBanksByTier = (tier: CertificationTier) =>
-    QUESTION_BANKS.filter(bank => bank.tier === tier).sort((a, b) => {
+export const getBanksByTier = (
+    provider: CertificationProvider,
+    tier: CertificationTier
+) =>
+    QUESTION_BANKS.filter(
+        bank => bank.provider === provider && bank.tier === tier
+    ).sort((a, b) => {
         if (a.available && !b.available) return -1;
         if (!a.available && b.available) return 1;
         return 0;

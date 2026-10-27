@@ -94,6 +94,28 @@ const TECHNICAL_KEYWORDS = [
     'TensorBoard',
     'Metadata',
 
+    // Claude specific terms
+    'Claude Code',
+    'Agent SDK',
+    'MCP',
+    'CLAUDE.md',
+    'stop_reason',
+    'tool_choice',
+    'tool_use',
+    'tool_result',
+    'end_turn',
+    'PostToolUse',
+    'allowedTools',
+    'isError',
+    'custom_id',
+    'fork_session',
+    'plan mode',
+    'subagent',
+    'coordinator',
+    'few-shot',
+    'Message Batches API',
+    'JSON schema',
+
     // Data processing terms
     'ETL',
     'data pipeline',

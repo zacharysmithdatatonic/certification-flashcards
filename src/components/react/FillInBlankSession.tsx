@@ -7,6 +7,7 @@ import {
     Typography,
 } from '@mui/material';
 import type { Question, QuestionPerformance } from '../../lib/banks';
+import { navigateInHierarchy } from '../../lib/hierarchyHistory';
 import { loadQuestionsFromJSON } from '../../lib/questionParser';
 import {
     createInitialPerformance,
@@ -133,9 +134,8 @@ function FillInBlankSessionContent({
         if (currentIndex < currentQuestions.length - 1) {
             setCurrentIndex(prev => prev + 1);
         } else {
-            window.location.href = window.location.pathname.replace(
-                /\/fill-in-blank\/?$/,
-                '/'
+            navigateInHierarchy(
+                window.location.pathname.replace(/\/fill-in-blank\/?$/, '/')
             );
         }
     }, [currentIndex, currentQuestions.length]);

@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 
 export default defineConfig({
     site: 'https://zacharysmithdatatonic.github.io',
-    base: '/google-cloud-certification-flashcards/',
+    base: '/certification-flashcards/',
     output: 'static',
     integrations: [react()],
 });
