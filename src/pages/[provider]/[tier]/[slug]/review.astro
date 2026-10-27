@@ -1,11 +1,11 @@
 ---
-import BankLayout from '../../../layouts/BankLayout.astro';
-import { ExamSession } from '../../../components/react/ExamSession';
+import BankLayout from '../../../../layouts/BankLayout.astro';
+import { ReviewSession } from '../../../../components/react/ReviewSession';
 import {
     getBankBasePath,
     getStaticBankPaths,
     type QuestionBank,
-} from '../../../lib/banks';
+} from '../../../../lib/banks';
 
 export function getStaticPaths() {
     return getStaticBankPaths();
@@ -18,10 +18,10 @@ interface Props {
 const { bank } = Astro.props;
 ---
 
-<BankLayout bank={bank} mode="exam" wide>
-    <ExamSession
+<BankLayout bank={bank} mode="review" wide>
+    <ReviewSession
         client:load
-        bank={bank}
+        bankKey={bank.key}
         dataset={bank.dataset!}
         bankBasePath={getBankBasePath(bank)}
     />

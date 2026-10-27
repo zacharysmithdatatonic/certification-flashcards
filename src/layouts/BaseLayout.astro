@@ -5,8 +5,8 @@ interface Props {
 }
 
 const {
-    title = 'Google Cloud Certification Flashcards',
-    description = 'Study for Google Cloud certifications with focused flashcards tailored to each exam.',
+    title = 'Certification Flashcards',
+    description = 'Study for Google Cloud and Anthropic certifications with focused flashcards tailored to each exam.',
 } = Astro.props;
 ---
 
@@ -29,6 +29,10 @@ const {
     </head>
     <body>
         <slot />
+        <script>
+            import { installHierarchyHistory } from '../lib/hierarchyHistory';
+            installHierarchyHistory();
+        </script>
     </body>
 </html>
 

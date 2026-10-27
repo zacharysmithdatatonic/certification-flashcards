@@ -12,7 +12,7 @@ tasks:
     desc: Show available commands
     silent: true
     cmds:
-      - echo "Google Cloud Certification Flashcards - Available Commands"
+      - echo "Certification Flashcards - Available Commands"
       - echo ""
       - echo "Development:"
       - echo "  task dev            - Run the app in development mode"

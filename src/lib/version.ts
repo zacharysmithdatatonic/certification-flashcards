@@ -9,4 +9,4 @@ export const APP_VERSION = packageJson.version;
 
 export const RELEASE_TAG = `v${APP_VERSION}`;
 
-export const RELEASE_URL = `https://github.com/zacharysmithdatatonic/google-cloud-certification-flashcards/releases/tag/${RELEASE_TAG}`;
+export const RELEASE_URL = `https://github.com/zacharysmithdatatonic/certification-flashcards/releases/tag/${RELEASE_TAG}`;

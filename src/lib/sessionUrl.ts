@@ -27,7 +27,7 @@ export const syncSessionToURL = (
     } else {
         url.searchParams.delete('questionId');
     }
-    window.history.replaceState({}, '', url.toString());
+    window.history.replaceState(window.history.state, '', url.toString());
 };
 
 export const resolveStartIndex = (

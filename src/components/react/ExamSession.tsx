@@ -24,6 +24,7 @@ import type {
     QuestionBank,
     QuestionPerformance,
 } from '../../lib/banks';
+import { navigateInHierarchy } from '../../lib/hierarchyHistory';
 import { loadQuestionsFromJSON } from '../../lib/questionParser';
 import {
     createInitialPerformance,
@@ -450,7 +451,7 @@ function ExamSessionContent({ bank, dataset, bankBasePath }: ExamSessionProps) {
     const leaveExam = useCallback(() => {
         allowLeaveRef.current = true;
         clearExamSession(bank.key);
-        window.location.href = bankBasePath;
+        navigateInHierarchy(bankBasePath);
     }, [bank.key, bankBasePath]);
 
     const requestLeave = useCallback(() => {

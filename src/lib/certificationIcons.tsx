@@ -35,6 +35,10 @@ const CERTIFICATION_ICONS: Record<string, LucideIcon> = {
     pmle: Brain,
     paa: Bot,
     psoe: Shield,
+    'ccar-f': Bot,
+    'cca-f': Users,
+    'ccd-f': Code,
+    'ccar-p': Bot,
 };
 
 const STUDY_MODE_ICONS: Record<StudyMode, LucideIcon> = {

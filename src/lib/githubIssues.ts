@@ -2,7 +2,7 @@ import type { Question, QuestionBank } from './banks';
 import { QUESTION_BANKS } from './banks';
 
 const ISSUES_NEW_URL =
-    'https://github.com/zacharysmithdatatonic/google-cloud-certification-flashcards/issues/new';
+    'https://github.com/zacharysmithdatatonic/certification-flashcards/issues/new';
 
 const QUESTION_ANSWER_TEMPLATE = 'question-answer.yml';
 

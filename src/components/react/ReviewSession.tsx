@@ -8,6 +8,7 @@ import {
     Typography,
 } from '@mui/material';
 import type { Question, QuestionPerformance } from '../../lib/banks';
+import { navigateInHierarchy } from '../../lib/hierarchyHistory';
 import { loadQuestionsFromJSON } from '../../lib/questionParser';
 import {
     createInitialPerformance,
@@ -136,7 +137,7 @@ function ReviewSessionContent({
         if (currentIndex < currentQuestions.length - 1) {
             setCurrentIndex(prev => prev + 1);
         } else {
-            window.location.href = bankBasePath;
+            navigateInHierarchy(bankBasePath);
         }
     }, [bankBasePath, currentIndex, currentQuestions.length]);
 

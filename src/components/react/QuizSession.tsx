@@ -7,6 +7,7 @@ import {
     Typography,
 } from '@mui/material';
 import type { Question, QuestionPerformance } from '../../lib/banks';
+import { navigateInHierarchy } from '../../lib/hierarchyHistory';
 import { loadQuestionsFromJSON } from '../../lib/questionParser';
 import {
     createInitialPerformance,
@@ -130,9 +131,8 @@ function QuizSessionContent({ bankKey, dataset }: QuizSessionProps) {
         if (currentIndex < currentQuestions.length - 1) {
             setCurrentIndex(prev => prev + 1);
         } else {
-            window.location.href = window.location.pathname.replace(
-                /\/quiz\/?$/,
-                '/'
+            navigateInHierarchy(
+                window.location.pathname.replace(/\/quiz\/?$/, '/')
             );
         }
     }, [currentIndex, currentQuestions.length]);

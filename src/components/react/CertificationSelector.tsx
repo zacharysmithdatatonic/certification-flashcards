@@ -1,14 +1,15 @@
 import React from 'react';
 import { Box, Container, Typography, Stack, Button, Chip } from '@mui/material';
-import type { QuestionBank, CertificationTier } from '../../lib/banks';
+import type { ProviderInfo, QuestionBank, TierInfo } from '../../lib/banks';
 import {
-    CERTIFICATION_TIERS,
+    CERTIFICATION_PROVIDERS,
     getBankBasePath,
     getBanksByTier,
 } from '../../lib/banks';
 import { getAssetUrl } from '../../lib/assets';
 import { Lock } from 'lucide-react';
 import { getCertificationIcon } from '../../lib/certificationIcons';
+import { getProviderLogo } from '../../lib/providerLogos';
 import { ReactProviders } from './ReactProviders';
 
 const CertificationItem: React.FC<{ bank: QuestionBank }> = ({ bank }) => {
@@ -83,11 +84,9 @@ const CertificationItem: React.FC<{ bank: QuestionBank }> = ({ bank }) => {
 };
 
 const TierColumn: React.FC<{
-    tier: CertificationTier;
+    tierInfo: TierInfo;
     banks: QuestionBank[];
-}> = ({ tier, banks }) => {
-    const tierInfo = CERTIFICATION_TIERS[tier];
-
+}> = ({ tierInfo, banks }) => {
     return (
         <Box
             sx={{
@@ -119,13 +118,38 @@ const TierColumn: React.FC<{
     );
 };
 
-function CertificationSelectorContent() {
-    const tiers: CertificationTier[] = [
-        'foundational',
-        'associate',
-        'professional',
-    ];
+const ProviderSection: React.FC<{ provider: ProviderInfo }> = ({
+    provider,
+}) => (
+    <Stack spacing={2} component="section">
+        <Stack direction="row" spacing={1.25} sx={{ alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', color: 'text.primary' }} aria-hidden>
+                {getProviderLogo(provider.key, 28)}
+            </Box>
+            <Typography variant="h5">{provider.name}</Typography>
+        </Stack>
+        <Box
+            sx={{
+                display: 'grid',
+                gap: 3,
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    md: `repeat(${provider.tiers.length}, 1fr)`,
+                },
+            }}
+        >
+            {provider.tiers.map(tierInfo => (
+                <TierColumn
+                    key={tierInfo.key}
+                    tierInfo={tierInfo}
+                    banks={getBanksByTier(provider.key, tierInfo.key)}
+                />
+            ))}
+        </Box>
+    </Stack>
+);
 
+function CertificationSelectorContent() {
     return (
         <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 6 }}>
             <Container maxWidth="lg">
@@ -133,52 +157,52 @@ function CertificationSelectorContent() {
                     <Stack spacing={2} sx={{ alignItems: 'center' }}>
                         <Stack
                             direction="row"
-                            spacing={2}
+                            spacing={{ xs: 1.5, md: 2 }}
                             sx={{ alignItems: 'center' }}
                         >
                             <Box
                                 component="img"
                                 src={getAssetUrl('/logo.png')}
-                                alt="Certification Flashcards logo"
-                                sx={{ width: 40, height: 40 }}
+                                alt=""
+                                sx={{
+                                    width: { xs: 44, md: 60 },
+                                    height: { xs: 44, md: 60 },
+                                }}
                             />
-                            <Box>
-                                <Typography variant="h4">
-                                    Google Cloud
-                                </Typography>
-                                <Typography variant="h5" color="text.secondary">
-                                    Certification Flashcards
-                                </Typography>
-                            </Box>
+                            <Typography
+                                variant="h1"
+                                sx={{
+                                    fontSize: { xs: '1.875rem', md: '2.5rem' },
+                                    fontWeight: 500,
+                                    letterSpacing: '-0.01em',
+                                    lineHeight: 1.2,
+                                    textWrap: 'balance',
+                                }}
+                            >
+                                Certification Flashcards
+                            </Typography>
                         </Stack>
                         <Typography
                             variant="body1"
                             color="text.secondary"
-                            sx={{ textAlign: 'center', maxWidth: 700 }}
+                            sx={{
+                                textAlign: 'center',
+                                maxWidth: 700,
+                                textWrap: 'pretty',
+                            }}
                         >
-                            Choose your certification track to start studying
-                            with focused flashcards tailored to the exam.
+                            Choose a provider and certification track to start
+                            studying with focused flashcards tailored to the
+                            exam.
                         </Typography>
                     </Stack>
 
-                    <Box
-                        sx={{
-                            display: 'grid',
-                            gap: 3,
-                            gridTemplateColumns: {
-                                xs: '1fr',
-                                md: 'repeat(3, 1fr)',
-                            },
-                        }}
-                    >
-                        {tiers.map(tier => (
-                            <TierColumn
-                                key={tier}
-                                tier={tier}
-                                banks={getBanksByTier(tier)}
-                            />
-                        ))}
-                    </Box>
+                    {CERTIFICATION_PROVIDERS.map(provider => (
+                        <ProviderSection
+                            key={provider.key}
+                            provider={provider}
+                        />
+                    ))}
                 </Stack>
             </Container>
         </Box>
